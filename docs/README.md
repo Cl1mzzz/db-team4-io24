@@ -3,7 +3,7 @@ home: true
 actionText: Розпочати →
 actionLink: /intro/
 
-footer: "ECL 2.0 Licensed | Copyright © [2024] [Danylo Zakrevskyi]"
+footer: "ECL 2.0 Licensed | Copyright © [2024] [Volodimir Borodii]"
 ---
 
 
@@ -11,7 +11,7 @@ footer: "ECL 2.0 Licensed | Copyright © [2024] [Danylo Zakrevskyi]"
 
 *студент 2-го курсу, групи ІО-24*<span padding-right:5em></span> 
 
-**Закревський Данило [Telegram](https://t.me/Mayfff)**
+**Бородій Володимир [Telegram](https://t.me/Cl1mzzz)**
 
 **Керівник**
 

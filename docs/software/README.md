@@ -264,7 +264,7 @@ COMMIT;
 ### Role
 
 ```java
-package db.lab6.entity;
+package db.Lab6.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -284,40 +284,48 @@ public class Role {
 }
 ```
 
-### Permission
+### User
 
 ```java
-package db.lab6.entity;
+package db.Lab6.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
-@Table(name = "permission")
+
 @Data
-public class Permission {
+@Table(name = "users")
+@Entity
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private String email;
+
+    @Column(nullable = false, unique = true)
+    private String nickname;
+
+    @Column(nullable = false, unique = true)
+    private String password;
 }
 ```
 
-### Grant
+### Member
 
 ```java
-package db.lab6.entity;
+package db.Lab6.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Entity
-@Table(name = "grants")
+
 @Data
-public class Grant {
+@Table(name = "member")
+@Entity
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -328,8 +336,8 @@ public class Grant {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "permission_id", nullable = false)
-    private Permission permission;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
 ```
 
@@ -338,7 +346,7 @@ public class Grant {
 ### RoleDTO
 
 ```java
-package db.lab6.dto;
+package db.Lab6.dto;
 
 import lombok.Data;
 
@@ -348,30 +356,32 @@ public class RoleDTO {
 }
 ```
 
-### PermissionDTO
+### UserDTO
 
 ```java
-package db.lab6.dto;
+package db.Lab6.dto;
 
 import lombok.Data;
 
 @Data
-public class PermissionDTO {
-    private String name;
+public class UserDTO {
+    private String email;
+    private String nickname;
+    private String password;
 }
 ```
 
-### GrantDTO
+### MemberDTO
 
 ```java
-package db.lab6.dto;
+package db.Lab6.dto;
 
 import lombok.Data;
 
 @Data
-public class GrantDTO {
+public class MemberDTO {
     private Long roleId;
-    private Long permissionId;
+    private Long userId;
 }
 ```
 
@@ -380,11 +390,11 @@ public class GrantDTO {
 ### RoleController
 
 ```java
-package db.lab6.controller;
+package db.Lab6.controller;
 
-import db.lab6.dto.RoleDTO;
-import db.lab6.entity.Role;
-import db.lab6.service.RoleService;
+import db.Lab6.entity.Role;
+import db.Lab6.service.RoleService;
+import db.Lab6.dto.RoleDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -396,45 +406,45 @@ import java.util.List;
 public class RoleController {
     private RoleService roleService;
 
-    @PostMapping("/add")
+    @PostMapping ("/add")
     public Role addRole(@RequestBody RoleDTO roleDTO) {
         Role role = roleService.addRole(roleDTO);
         return role;
     }
 
     @GetMapping("/get/{id}")
-    public Role getRoleById(@PathVariable Long id) {
+    public Role getRoleById(@PathVariable Long id){
         Role role = roleService.getRoleById(id);
         return role;
     }
 
     @GetMapping("/get/all")
-    public List<Role> getAllRoles() {
+    public List<Role> getAllRoles(){
         return roleService.getAllRoles();
     }
 
     @PutMapping("/update/{id}")
-    public Role updateRole(@PathVariable Long id, @RequestBody RoleDTO roleDTO) {
+    public Role updateRole(@PathVariable Long id, @RequestBody RoleDTO roleDTO){
         Role role = roleService.updateRole(id, roleDTO);
         return role;
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteRole(@PathVariable Long id) {
+    public String deleteRole(@PathVariable Long id){
         roleService.deleteRole(id);
         return "Role deleted";
     }
 }
 ```
 
-### PermissionController
+### UserController
 
 ```java
-package db.lab6.controller;
+package db.Lab6.controller;
 
-import db.lab6.dto.PermissionDTO;
-import db.lab6.entity.Permission;
-import db.lab6.service.PermissionService;
+import db.Lab6.dto.UserDTO;
+import db.Lab6.entity.User;
+import db.Lab6.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -442,100 +452,94 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/permission")
-public class PermissionController {
-    private PermissionService permissionService;
+@RequestMapping("/user")
+public class UserController {
+    private UserService userService;
 
     @PostMapping("/add")
-    public Permission addRole(@RequestBody PermissionDTO permissionDTO) {
-        Permission permission = permissionService.addPermission(permissionDTO);
-        return permission;
+    public User addUser(@RequestBody UserDTO userDTO) {
+        User user = userService.addUser(userDTO);
+        return user;
     }
 
     @GetMapping("/get/{id}")
-    public Permission getRoleById(@PathVariable Long id) {
-        Permission permission = permissionService.getPermissionById(id);
-        return permission;
+    public User getUserById(@PathVariable Long id){
+        User user = userService.getUserById(id);
+        return user;
     }
 
     @GetMapping("/get/all")
-    public List<Permission> getAllPermissions() {
-        return permissionService.getAllPermissions();
+    public List<User> getAllUsers(){
+        return userService.getAllUsers();
     }
 
     @PutMapping("/update/{id}")
-    public Permission updateRole(@PathVariable Long id, @RequestBody PermissionDTO permissionDTO) {
-        Permission permission = permissionService.updatePermission(id, permissionDTO);
-        return permission;
+    public User updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO){
+        User user = userService.updateUser(id, userDTO);
+        return user;
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteRole(@PathVariable Long id) {
-        permissionService.deletePermission(id);
-        return "Permission deleted";
+    public String deleteRole(@PathVariable Long id){
+        userService.deleteUser(id);
+        return "User deleted";
     }
-
 }
 ```
 
-### GrantController
+### MemberController
 
 ```java
-package db.lab6.controller;
+package db.Lab6.controller;
 
-import db.lab6.dto.GrantDTO;
-import db.lab6.entity.Grant;
-import db.lab6.service.GrantService;
+import db.Lab6.dto.MemberDTO;
+import db.Lab6.entity.Member;
+import db.Lab6.service.MemberService;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/member")
 @AllArgsConstructor
-@RequestMapping("/grant")
-public class GrantController {
-    private GrantService grantService;
+public class MemberController {
+    private MemberService memberService;
 
     @PostMapping("/add")
-    public Grant addGrant(@RequestBody GrantDTO grantDTO) {
-        Grant grant = grantService.addGrant(grantDTO);
-        return grant;
+    public Member addMember(@RequestBody MemberDTO memberDTO) {
+        Member member = memberService.addMember(memberDTO);
+        return member;
     }
 
     @GetMapping("/get/{id}")
-    public Grant getRoleById(@PathVariable Long id) {
-        Grant grant = grantService.getGrantById(id);
-        return grant;
+    public Member getMemberById(@PathVariable Long id) {
+        Member member = memberService.getMemberById(id);
+        return member;
     }
 
     @GetMapping("/get/all")
-    public List<Grant> getAllGrants() {
-        return grantService.getAllGrants();
+    public List<Member> getAllGrants() {
+        return memberService.getAllMembers();
     }
 
     @GetMapping("/get/by_role/{id}")
-    public List<Grant> getGrantsByRoleId(@PathVariable Long id) {
-        return grantService.getGrantsByRoleId(id);
-    }
-
-    @GetMapping("/get/by_permission/{id}")
-    public List<Grant> getGrantByPermissionId(@PathVariable Long id) {
-        return grantService.getGrantsByPermissionId(id);
+    public List<Member> getMembersByRoleId(@PathVariable Long id) {
+        return memberService.getMembersByRoleId(id);
     }
 
     @PutMapping("/update/{id}")
-    public Grant updateGrant(@PathVariable Long id, @RequestBody GrantDTO grantDTO) {
-        Grant grant = grantService.updateGrant(id, grantDTO);
-        return grant;
+    public Member updateMember(@PathVariable Long id, @RequestBody MemberDTO memberDTO) {
+        Member member = memberService.updateMember(id, memberDTO);
+        return member;
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteGrant(@PathVariable Long id) {
-        grantService.deleteGrant(id);
-        return "Grant deleted";
+    public String deleteRole(@PathVariable Long id){
+        memberService.deleteMemberById(id);
+        return "Member deleted";
     }
-
 }
 ```
 
@@ -544,11 +548,11 @@ public class GrantController {
 ### RoleService
 
 ```java
-package db.lab6.service;
+package db.Lab6.service;
 
-import db.lab6.dto.RoleDTO;
-import db.lab6.entity.Role;
-import db.lab6.repository.RoleRepository;
+import db.Lab6.dto.RoleDTO;
+import db.Lab6.repository.RoleRepository;
+import db.Lab6.entity.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -580,7 +584,7 @@ public class RoleService {
     }
 
     public void deleteRole(Long id) {
-        if (roleRepository.existsById(id)) {
+        if (roleRepository.existsById(id)){
             roleRepository.deleteById(id);
         } else {
             throw new IllegalArgumentException("Role not found");
@@ -589,64 +593,68 @@ public class RoleService {
 }
 ```
 
-### PermissionService
+### UserService
 
 ```java
-package db.lab6.service;
+package db.Lab6.service;
 
-import db.lab6.dto.PermissionDTO;
-import db.lab6.entity.Permission;
-import db.lab6.repository.PermissionRepository;
+import db.Lab6.entity.User;
+import db.Lab6.dto.UserDTO;
+import db.Lab6.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 @AllArgsConstructor
-public class PermissionService {
-    private PermissionRepository permissionRepository;
+public class UserService {
+    private UserRepository userRepository;
 
-    public Permission addPermission(PermissionDTO permissionDTO) {
-        Permission permission = new Permission();
-        permission.setName(permissionDTO.getName());
-        return permissionRepository.save(permission);
+    public User addUser(UserDTO userDTO) {
+        User user = new User();
+        user.setEmail(userDTO.getEmail());
+        user.setNickname(userDTO.getNickname());
+        user.setPassword(userDTO.getPassword());
+        return userRepository.save(user);
     }
 
-    public Permission getPermissionById(Long id) {
-        return permissionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Permission not found"));
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
-    public List<Permission> getAllPermissions() {
-        return permissionRepository.findAll();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
-    public Permission updatePermission(Long id, PermissionDTO permissionDTO) {
-        Permission permission = permissionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Permission not found"));
-        permission.setName(permissionDTO.getName());
-        return permissionRepository.save(permission);
+    public User updateUser(Long id, UserDTO userDTO) {
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        user.setEmail(userDTO.getEmail());
+        user.setNickname(userDTO.getNickname());
+        user.setPassword(userDTO.getPassword());
+        return userRepository.save(user);
     }
 
-    public void deletePermission(Long id) {
-        if (permissionRepository.existsById(id)) {
-            permissionRepository.deleteById(id);
+    public void deleteUser(Long id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
         } else {
-            throw new IllegalArgumentException("Permission not found");
+            throw new IllegalArgumentException("User not found");
         }
     }
 }
 ```
-### GrantService
+
+### MemberService
 
 ```java
-package db.lab6.service;
+package db.Lab6.service;
 
-import db.lab6.dto.GrantDTO;
-import db.lab6.entity.Grant;
-import db.lab6.repository.GrantRepository;
-import db.lab6.repository.PermissionRepository;
-import db.lab6.repository.RoleRepository;
+import db.Lab6.dto.MemberDTO;
+import db.Lab6.entity.Member;
+import db.Lab6.repository.MemberRepository;
+import db.Lab6.repository.RoleRepository;
+import db.Lab6.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -654,107 +662,96 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class GrantService {
-    private GrantRepository grantRepository;
+public class MemberService {
+    private MemberRepository memberRepository;
     private RoleRepository roleRepository;
-    private PermissionRepository permissionRepository;
+    private UserRepository userRepository;
 
-    public Grant addGrant(GrantDTO grantDTO) {
-        Grant grant = new Grant();
-        grant.setRole(
-                roleRepository.findById(grantDTO.getRoleId()).orElseThrow(() -> new IllegalArgumentException("Role not found"))
-        );
-        grant.setPermission(
-                permissionRepository.findById(grantDTO.getPermissionId()).orElseThrow(() -> new IllegalArgumentException("Permission not found"))
-        );
-        return grantRepository.save(grant);
+    public Member addMember(MemberDTO memberDTO) {
+        Member member = new Member();
+        member.setRole(roleRepository.findById(memberDTO.getRoleId()).orElseThrow(() -> new IllegalArgumentException("Role not found")));
+        member.setUser(userRepository.findById(memberDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException("User not found")));
+        return memberRepository.save(member);
+    }
+    public Member getMemberById(Long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Member not found"));
+    }
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
+    }
+    public void deleteMemberById(Long id) {
+        memberRepository.deleteById(id);
     }
 
-    public Grant getGrantById(Long id) {
-        return grantRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Grant not found"));
+    public Member updateMember(Long id, MemberDTO memberDTO) {
+        Member member = getMemberById(id);
+        member.setRole(roleRepository.findById(memberDTO.getRoleId()).orElseThrow(() -> new IllegalArgumentException("Role not found")));
+        member.setUser(userRepository.findById(memberDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException("User not found")));
+        return memberRepository.save(member);
+    }
+    public List<Member> getMembersByRoleId(Long roleId) {
+        return memberRepository.findByRoleId(roleId);
     }
 
-    public List<Grant> getAllGrants() {
-        return grantRepository.findAll();
-    }
-
-    public void deleteGrant(Long id) {
-        grantRepository.deleteById(id);
-    }
-
-    public Grant updateGrant(Long id, GrantDTO grantDTO) {
-        Grant grant = getGrantById(id);
-        grant.setRole(
-                roleRepository.findById(grantDTO.getRoleId()).orElseThrow(() -> new IllegalArgumentException("Role not found"))
-        );
-        grant.setPermission(
-                permissionRepository.findById(grantDTO.getPermissionId()).orElseThrow(() -> new IllegalArgumentException("Permission not found"))
-        );
-        return grantRepository.save(grant);
-    };
-
-    public List<Grant> getGrantsByRoleId(Long roleId) {
-        return grantRepository.findByRoleId(roleId);
-    }
-
-    public List<Grant> getGrantsByPermissionId(Long permissionId) {
-        return grantRepository.findByPermissionId(permissionId);
-    }
 }
 ```
+
 ## Repository
 
 ### RoleRepository
 
 ```java
-package db.lab6.repository;
+package db.Lab6.repository;
 
-import db.lab6.entity.Role;
+import db.Lab6.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoleRepository extends JpaRepository<Role, Long> { }
+public interface RoleRepository extends JpaRepository<Role, Long> {
+
+}
 ```
 
-### PermissionRepository
+### UserRepository
 
 ```java
-package db.lab6.repository;
+package db.Lab6.repository;
 
-import db.lab6.entity.Permission;
+import db.Lab6.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PermissionRepository extends JpaRepository<Permission, Long> { }
+public interface UserRepository extends JpaRepository<User, Long> {
+}
 ```
 
-### GrantRepository
+### MemberRepository
 
 ```java
-package db.lab6.repository;
+package db.Lab6.repository;
 
-import db.lab6.entity.Grant;
+import db.Lab6.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface GrantRepository extends JpaRepository<Grant, Long> {
-    List<Grant> findByRoleId(Long roleId);
-    List<Grant> findByPermissionId(Long permissionId);
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    List<Member> findByRoleId(Long roleId);
 }
 ```
 
 ## SpringMainClass
 
 ```java
-package db.lab6;
+package db.Lab6;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Lab6Application {
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(Lab6Application.class, args);
 	}
+
 }
 ```

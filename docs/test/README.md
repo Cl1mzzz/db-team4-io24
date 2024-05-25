@@ -2,63 +2,59 @@
 
 Для перевірки працездатності використовується застосунок Postman.
 
-Перевірятись будуть таблиці **role**, **permission** та **grant**
+Перевірятись будуть таблиці **role**, **user** та **member**
 
 ## Role
 
-
 ### POST
-![](./assets/role_post.png)
+![](./pictures/role_add.png)
 
 ### GET (all)
-![](./assets/role_get_all.png)
+![](./pictures/role_get_all.png)
 
 ### GET (id)
-![](./assets/role_get_id.png)
+![](./pictures/role_get_id.png)
 
 ### PUT
-![](./assets/role_put.png)
+![](./pictures/role_update.png)
 
 ### DELETE
-![](./assets/role_delete.png)
+![](./pictures/role_delete.png)
 
 
-## Permission
+## User
 
 ### POST
-![](./assets/permission_post.png)
+![](./pictures/user_add.png)
 
 ### GET (all)
-![](./assets/permission_get_all.png)
+![](./pictures/user_get_all.png)
 
 ### GET (id)
-![](./assets/permission_get_id.png)
+![](./pictures/user_get_id.png)
 
 ### PUT
-![](./assets/permission_put.png)
+![](./pictures/user_update.png)
 
 ### DELETE
-![](./assets/permission_delete.png)
+![](./pictures/user_delete.png)
 
-## Grant
+## Member
 
 ### POST
-![](./assets/grant_post.png)
+![](./pictures/member_add.png)
 
 ### GET (all)
-![](./assets/grant_get_all.png)
+![](./pictures/member_get_all.png)
 
 ### GET (id)
-![](./assets/grant_get_id.png)
+![](./pictures/member_get_id.png)
 
 ### GET (roleID)
-![](./assets/grant_get_roleid.png)
-
-### GET (permissionId)
-![](./assets/grant_get_permissionid.png)
+![](./pictures/member_get_by_role.png)
 
 ### PUT
-![](./assets/grant_put.png)
+![](./pictures/member_update.png)
 
 ### DELETE
-![](./assets/grant_delete.png)
+![](./pictures/member_delete.png)
